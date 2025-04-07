@@ -4,12 +4,12 @@ void main() {
   runApp(
       MaterialApp(
         home: Scaffold(
-            backgroundColor: Colors.black,
-            body: Center(
-              child: Text(
-                'code Factory',
-                style: TextStyle(color: Colors.white)
-              ),
+            backgroundColor: Color(0xFF6390ff),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('asset/img/logo.png')
+              ],
             )
         ),
       )
