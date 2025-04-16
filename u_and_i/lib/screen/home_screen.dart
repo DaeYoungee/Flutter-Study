@@ -13,54 +13,49 @@ class HomeScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      "U&I",
-                      style: TextStyle(
-                        fontSize: 80.0,
-                        fontFamily: "parisienne",
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "우리 처음 만날 날",
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontFamily: "sunflower",
-                        color: Colors.white,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.favorite, color: Colors.red),
-                    ),
-                    Text(
-                      "D+1",
-                      style: TextStyle(
-                        fontSize: 50.0,
-                        fontFamily: "sunflower",
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      "2023-11-23",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontFamily: "sunflower",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(child: Image.asset("asset/img/middle_image.png")),
+              _Top(),
+
+              /// 이미지
+              _Bottom(),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class _Top extends StatelessWidget {
+  const _Top({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Expanded(
+      child: Column(
+        children: [
+          Text("U&I", style: textTheme.displayLarge),
+          Text("우리 처음 만날 날", style: textTheme.bodyLarge),
+          Text("2023-11-23", style: textTheme.bodyMedium),
+
+          IconButton(
+            iconSize: 60.0,
+            onPressed: () {},
+            icon: Icon(Icons.favorite, color: Colors.red),
+          ),
+          Text("D+1", style: textTheme.displayMedium),
+        ],
+      ),
+    );
+  }
+}
+
+class _Bottom extends StatelessWidget {
+  const _Bottom({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(child: Image.asset("asset/img/middle_image.png"));
   }
 }
