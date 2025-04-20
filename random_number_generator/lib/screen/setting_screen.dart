@@ -10,7 +10,7 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  final int maxNumber = 1000;
+  int maxNumber = 1000;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +21,24 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [_Number(maxNumber: maxNumber), _Slider(), _Button()],
+            children: [
+              _Number(maxNumber: maxNumber),
+              _Slider(
+                maxNumber: maxNumber.toDouble(),
+                onChanged: onSliderChanged,
+              ),
+              _Button(),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  onSliderChanged(double value) {
+    setState(() {
+      maxNumber = value.toInt();
+    });
   }
 }
 
@@ -36,18 +49,25 @@ class _Number extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: NumberToImage(number: maxNumber)
-    );
+    return Expanded(child: NumberToImage(number: maxNumber));
   }
 }
 
 class _Slider extends StatelessWidget {
-  const _Slider({super.key});
+  final double maxNumber;
+  final ValueChanged<double> onChanged;
+
+  const _Slider({required this.maxNumber, required this.onChanged, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Slider(
+      value: maxNumber,
+      onChanged: onChanged,
+      min: 1000,
+      max: 100000,
+      activeColor: redColor,
+    );
   }
 }
 
