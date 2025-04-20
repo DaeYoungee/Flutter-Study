@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:random_number_generator/constant/color.dart';
+import 'package:random_number_generator/screen/setting_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,8 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+
               /// 앱바
-              _Header(),
+              _Header(onPressed: onSettingIconPressed),
 
               /// 랜덤 난수
               _Body(numbers: numbers),
@@ -49,10 +51,22 @@ class _HomeScreenState extends State<HomeScreen> {
       numbers = randomNumbers.toList();
     });
   }
+
+  onSettingIconPressed() {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) {
+          return SettingScreen();
+        })
+    );
+  }
 }
 
 class _Header extends StatelessWidget {
-  const _Header({super.key});
+  final VoidCallback onPressed;
+
+  const _Header({
+    required this.onPressed,
+    super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +82,7 @@ class _Header extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: onPressed,
           icon: Icon(Icons.settings),
           color: redColor,
         ),
@@ -89,23 +103,25 @@ class _Body extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children:
-            numbers
-                .map((e) => e.toString().split(''))
-                .map(
-                  (e) => Row(
-                    children:
-                        e
-                            .map(
-                              (number) => Image.asset(
-                                'asset/img/$number.png',
-                                width: 50.0,
-                                height: 70.0,
-                              ),
-                            )
-                            .toList(),
-                  ),
+        numbers
+            .map((e) => e.toString().split(''))
+            .map(
+              (e) =>
+              Row(
+                children:
+                e
+                    .map(
+                      (number) =>
+                      Image.asset(
+                        'asset/img/$number.png',
+                        width: 50.0,
+                        height: 70.0,
+                      ),
                 )
-                .toList(), // Text('123', style: TextStyle(color: Colors.white)),
+                    .toList(),
+              ),
+        )
+            .toList(), // Text('123', style: TextStyle(color: Colors.white)),
         // Text('123', style: TextStyle(color: Colors.white)),
         // Text('123', style: TextStyle(color: Colors.white)),
       ),
