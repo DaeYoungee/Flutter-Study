@@ -1,8 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:random_number_generator/constant/color.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<int> numbers = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +27,27 @@ class HomeScreen extends StatelessWidget {
               _Header(),
 
               /// 랜덤 난수
-              _Body(),
+              _Body(numbers: numbers),
 
               /// 버튼
-              _Footer(),
+              _Footer(onPressed: generateRandomNumber),
             ],
           ),
         ),
       ),
     );
+  }
+
+  generateRandomNumber() {
+    Random random = Random();
+    final Set<int> randomNumbers = {};
+    while (randomNumbers.length < 3) {
+      final randomNumber = random.nextInt(1000);
+      randomNumbers.add(randomNumber);
+    }
+    setState(() {
+      numbers = randomNumbers.toList();
+    });
   }
 }
 
@@ -57,7 +78,9 @@ class _Header extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({super.key});
+  List<int> numbers;
+
+  _Body({required this.numbers, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,23 +88,40 @@ class _Body extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('123', style: TextStyle(color: Colors.white)),
-          Text('123', style: TextStyle(color: Colors.white)),
-          Text('123', style: TextStyle(color: Colors.white)),
-        ],
+        children:
+            numbers
+                .map((e) => e.toString().split(''))
+                .map(
+                  (e) => Row(
+                    children:
+                        e
+                            .map(
+                              (number) => Image.asset(
+                                'asset/img/$number.png',
+                                width: 50.0,
+                                height: 70.0,
+                              ),
+                            )
+                            .toList(),
+                  ),
+                )
+                .toList(), // Text('123', style: TextStyle(color: Colors.white)),
+        // Text('123', style: TextStyle(color: Colors.white)),
+        // Text('123', style: TextStyle(color: Colors.white)),
       ),
     );
   }
 }
 
 class _Footer extends StatelessWidget {
-  const _Footer({super.key});
+  final VoidCallback onPressed;
+
+  const _Footer({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       child: Text('생성하기!', style: TextStyle(color: Colors.white)),
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
