@@ -20,7 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.black,
       body:
           video != null
-              ? _VideoPlayer(video: video!, onPickAnotherVideoPressed: onLogoTap,)
+              ? _VideoPlayer(
+                video: video!,
+                onPickAnotherVideoPressed: onLogoTap,
+              )
               : _VideoSelector(onTap: onLogoTap),
     );
   }
@@ -196,10 +199,27 @@ class _Bottom extends StatelessWidget {
       bottom: 0,
       left: 0,
       right: 0,
-      child: Slider(
-        value: position.inSeconds.toDouble(),
-        onChanged: onChanged,
-        max: maxPosition.inSeconds.toDouble(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: [
+            Text(
+              '${position.inMinutes.toString().padLeft(2, '0')}:${(position.inSeconds % 60).toString().padLeft(2, '0')}',
+              style: TextStyle(color: Colors.white),
+            ),
+            Expanded(
+              child: Slider(
+                value: position.inSeconds.toDouble(),
+                onChanged: onChanged,
+                max: maxPosition.inSeconds.toDouble(),
+              ),
+            ),
+            Text(
+              '${maxPosition.inMinutes.toString().padLeft(2, '0')}:${(maxPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }
