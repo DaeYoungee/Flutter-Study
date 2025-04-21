@@ -50,16 +50,82 @@ class _VideoPlayerState extends State<_VideoPlayer> {
   void initState() {
     super.initState();
 
-    controller = VideoPlayerController.file(File(widget.video.path));
+    initializedController();
+  }
 
-    controller.initialize();
+  initializedController() async {
+    controller = VideoPlayerController.file(File(widget.video.path));
+    await controller.initialize();
+
+    controller.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: controller.value.aspectRatio,
-      child: VideoPlayer(controller),
+    return Center(
+      child: AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: Stack(
+          children: [
+            VideoPlayer(controller),
+            Align(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    color: Colors.white,
+                    onPressed: () {},
+                    icon: Icon(Icons.rotate_left),
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    onPressed: () {
+                      setState(() {
+                        if (controller.value.isPlaying) {
+                          controller.pause();
+                        } else {
+                          controller.play();
+                        }
+                      });
+                    },
+                    icon: Icon(
+                      controller.value.isPlaying
+                          ? Icons.pause
+                          : Icons.play_arrow,
+                    ),
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    onPressed: () {},
+                    icon: Icon(Icons.rotate_right),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Slider(
+                value: controller.value.position.inSeconds.toDouble(),
+                onChanged: (double b) {},
+                max: controller.value.duration.inSeconds.toDouble(),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              child: IconButton(
+                color: Colors.white,
+                onPressed: () {},
+                icon: Icon(Icons.photo_camera_back),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
