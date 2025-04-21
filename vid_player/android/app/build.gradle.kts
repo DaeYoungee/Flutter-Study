@@ -7,6 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.vid_player"
+
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
