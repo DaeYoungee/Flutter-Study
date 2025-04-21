@@ -77,7 +77,14 @@ class _VideoPlayerState extends State<_VideoPlayer> {
                 children: [
                   IconButton(
                     color: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      Duration currentPosition = controller.value.position;
+                      Duration duration = Duration();
+                      if (currentPosition.inSeconds - 3 >= 0) {
+                        duration = currentPosition - Duration(seconds: 3);
+                      }
+                      controller.seekTo(duration);
+                    },
                     icon: Icon(Icons.rotate_left),
                   ),
                   IconButton(
@@ -99,7 +106,15 @@ class _VideoPlayerState extends State<_VideoPlayer> {
                   ),
                   IconButton(
                     color: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      Duration maxPosition = controller.value.duration;
+                      Duration currentPosition = controller.value.position;
+                      Duration position = maxPosition;
+                      if (currentPosition.inSeconds + 3 < maxPosition.inSeconds) {
+                        position = currentPosition + Duration(seconds: 3);
+                      }
+                      controller.seekTo(position);
+                    },
                     icon: Icon(Icons.rotate_right),
                   ),
                 ],
@@ -111,7 +126,9 @@ class _VideoPlayerState extends State<_VideoPlayer> {
               right: 0,
               child: Slider(
                 value: controller.value.position.inSeconds.toDouble(),
-                onChanged: (double b) {},
+                onChanged: (double b) {
+                  controller.seekTo(Duration(seconds: b.toInt()));
+                },
                 max: controller.value.duration.inSeconds.toDouble(),
               ),
             ),
