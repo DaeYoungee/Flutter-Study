@@ -19,12 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body:
-          video != null
-              ? _VideoPlayer(
-                video: video!,
-                onPickAnotherVideoPressed: onLogoTap,
-              )
-              : _VideoSelector(onTap: onLogoTap),
+      video != null
+          ? _VideoPlayer(
+        video: video!,
+        onPickAnotherVideoPressed: onLogoTap,
+      )
+          : _VideoSelector(onTap: onLogoTap),
     );
   }
 
@@ -53,6 +53,7 @@ class _VideoPlayer extends StatefulWidget {
 
 class _VideoPlayerState extends State<_VideoPlayer> {
   late VideoPlayerController controller;
+  bool showIcons = false;
 
   @override
   void initState() {
@@ -80,25 +81,40 @@ class _VideoPlayerState extends State<_VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: AspectRatio(
-        aspectRatio: controller.value.aspectRatio,
-        child: Stack(
-          children: [
-            VideoPlayer(controller),
-            _PlayButton(
-              onForwardPressed: onForwardPressed,
-              onPlayPressed: onPlayPressed,
-              onReversePressed: onReversePressed,
-              isPlaying: controller.value.isPlaying,
-            ),
-            _Bottom(
-              position: controller.value.position,
-              maxPosition: controller.value.duration,
-              onChanged: onBottomChanged,
-            ),
-            _PickAnotherVideo(onPressed: widget.onPickAnotherVideoPressed),
-          ],
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          showIcons = !showIcons;
+        });
+      },
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: controller.value.aspectRatio,
+          child: Stack(
+            children: [
+              VideoPlayer(controller),
+              if (showIcons)
+                Container(width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.black.withAlpha(120)
+                ),
+
+              if (showIcons)
+                _PlayButton(
+                  onForwardPressed: onForwardPressed,
+                  onPlayPressed: onPlayPressed,
+                  onReversePressed: onReversePressed,
+                  isPlaying: controller.value.isPlaying,
+                ),
+              _Bottom(
+                position: controller.value.position,
+                maxPosition: controller.value.duration,
+                onChanged: onBottomChanged,
+              ),
+              if (showIcons)
+                _PickAnotherVideo(onPressed: widget.onPickAnotherVideoPressed),
+            ],
+          ),
         ),
       ),
     );
@@ -204,7 +220,8 @@ class _Bottom extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              '${position.inMinutes.toString().padLeft(2, '0')}:${(position.inSeconds % 60).toString().padLeft(2, '0')}',
+              '${position.inMinutes.toString().padLeft(2, '0')}:${(position
+                  .inSeconds % 60).toString().padLeft(2, '0')}',
               style: TextStyle(color: Colors.white),
             ),
             Expanded(
@@ -215,7 +232,9 @@ class _Bottom extends StatelessWidget {
               ),
             ),
             Text(
-              '${maxPosition.inMinutes.toString().padLeft(2, '0')}:${(maxPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+              '${maxPosition.inMinutes.toString().padLeft(
+                  2, '0')}:${(maxPosition.inSeconds % 60).toString().padLeft(
+                  2, '0')}',
               style: TextStyle(color: Colors.white),
             ),
           ],
