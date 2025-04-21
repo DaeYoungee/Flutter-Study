@@ -20,8 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.black,
       body:
           video != null
-              ? _VideoPlayer(video: video!)
-              : VideoSelector(onTap: onLogoTap),
+              ? _VideoPlayer(video: video!, onPickAnotherVideoPressed: onLogoTap,)
+              : _VideoSelector(onTap: onLogoTap),
     );
   }
 
@@ -36,8 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _VideoPlayer extends StatefulWidget {
   final XFile video;
+  final VoidCallback onPickAnotherVideoPressed;
 
-  const _VideoPlayer({required this.video, super.key});
+  const _VideoPlayer({
+    required this.video,
+    required this.onPickAnotherVideoPressed,
+    super.key,
+  });
 
   @override
   State<_VideoPlayer> createState() => _VideoPlayerState();
@@ -51,6 +56,14 @@ class _VideoPlayerState extends State<_VideoPlayer> {
     super.initState();
 
     initializedController();
+  }
+
+  @override
+  didUpdateWidget(covariant _VideoPlayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.video.path != widget.video.path) {
+      initializedController();
+    }
   }
 
   initializedController() async {
@@ -81,7 +94,7 @@ class _VideoPlayerState extends State<_VideoPlayer> {
               maxPosition: controller.value.duration,
               onChanged: onBottomChanged,
             ),
-            _PickAnotherVideo(),
+            _PickAnotherVideo(onPressed: widget.onPickAnotherVideoPressed),
           ],
         ),
       ),
@@ -193,7 +206,9 @@ class _Bottom extends StatelessWidget {
 }
 
 class _PickAnotherVideo extends StatelessWidget {
-  const _PickAnotherVideo({super.key});
+  final VoidCallback onPressed;
+
+  const _PickAnotherVideo({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -201,17 +216,17 @@ class _PickAnotherVideo extends StatelessWidget {
       right: 0,
       child: IconButton(
         color: Colors.white,
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Icon(Icons.photo_camera_back),
       ),
     );
   }
 }
 
-class VideoSelector extends StatelessWidget {
+class _VideoSelector extends StatelessWidget {
   final VoidCallback onTap;
 
-  const VideoSelector({required this.onTap, super.key});
+  const _VideoSelector({required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
