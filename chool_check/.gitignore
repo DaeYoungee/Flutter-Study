@@ -1,4 +1,4 @@
-.env*
+asset/config/.env
 
 # Miscellaneous
 *.class
