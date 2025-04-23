@@ -72,6 +72,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   onMapCreated: (GoogleMapController controller) {
                     this.controller = controller;
                   },
+                  markers: {
+                    Marker(
+                      markerId: MarkerId('123'),
+                      position: initialPosition.target,
+                    ),
+                  },
+                  circles: {
+                    Circle(
+                      circleId: CircleId('123'),
+                      center: initialPosition.target,
+                      strokeColor: Colors.blue,
+                      fillColor: Colors.blue.withAlpha(100),
+                      strokeWidth: 1,
+                      radius: 100,
+                    ),
+                  },
                 ),
               ),
             ],
