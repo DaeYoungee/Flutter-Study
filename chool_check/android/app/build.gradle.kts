@@ -21,7 +21,7 @@ if (envFile.exists()) {
 android {
     namespace = "com.example.chool_check"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    ndkVersion = flutter.ndkVersion
 
 
     compileOptions {
