@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,6 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   );
 
   late final GoogleMapController controller;
+
+  bool isChoolCheck = false;
 
   checkPermission() async {
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
@@ -64,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return Column(
             children: [
               Expanded(
+                flex: 2,
                 child: GoogleMap(
                   initialCameraPosition: initialPosition,
                   zoomControlsEnabled: false,
@@ -77,6 +81,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       markerId: MarkerId('123'),
                       position: initialPosition.target,
                     ),
+                    Marker(
+                      markerId: MarkerId('124'),
+                      position: LatLng(37.5204, 126.9236),
+                    ),
                   },
                   circles: {
                     Circle(
@@ -88,6 +96,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: 100,
                     ),
                   },
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      isChoolCheck ? Icons.check : Icons.timelapse_outlined,
+                      color: isChoolCheck ? Colors.green : Colors.blue,
+                    ),
+                    if (!isChoolCheck) SizedBox(height: 16.0),
+                    if (!isChoolCheck)
+                      OutlinedButton(
+                        onPressed: choolCheckPressed,
+                        child: Text('출근하기'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.blue,
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ],
@@ -107,5 +135,39 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  choolCheckPressed() async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('출근하기'),
+          content: Text('출근을 하시겠습니까?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.blue),
+              child: Text('출근'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result) {
+      setState(() {
+        isChoolCheck = true;
+      });
+    }
   }
 }
