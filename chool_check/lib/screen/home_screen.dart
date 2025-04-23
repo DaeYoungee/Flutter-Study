@@ -18,7 +18,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late final GoogleMapController controller;
 
-  bool isChoolCheck = false;
+  bool isChoolCheckDone = false;
+  bool isRangeDistance = false;
+
+  final double okDistance = 100;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Geolocator.getPositionStream().listen((event) {
+      final start = LatLng(37.5214, 126.9246);
+
+      final end = LatLng(event.latitude, event.longitude);
+
+      final distance = Geolocator.distanceBetween(
+        start.latitude,
+        start.longitude,
+        end.latitude,
+        end.longitude,
+      );
+
+      setState(() {
+        if (distance < okDistance) {
+          isRangeDistance = true;
+        } else {
+          isRangeDistance = false;
+        }
+      });
+    });
+  }
 
   checkPermission() async {
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
@@ -90,10 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Circle(
                       circleId: CircleId('123'),
                       center: initialPosition.target,
-                      strokeColor: Colors.blue,
-                      fillColor: Colors.blue.withAlpha(100),
+                      strokeColor: isRangeDistance ? Colors.blue : Colors.red,
+                      fillColor: isRangeDistance ? Colors.blue.withAlpha(100) : Colors.red.withAlpha(100),
                       strokeWidth: 1,
-                      radius: 100,
+                      radius: okDistance,
                     ),
                   },
                 ),
@@ -103,18 +132,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      isChoolCheck ? Icons.check : Icons.timelapse_outlined,
-                      color: isChoolCheck ? Colors.green : Colors.blue,
+                      isChoolCheckDone ? Icons.check : Icons.timelapse_outlined,
+                      color: isChoolCheckDone ? Colors.green : Colors.blue,
                     ),
-                    if (!isChoolCheck) SizedBox(height: 16.0),
-                    if (!isChoolCheck)
+                    if (!isChoolCheckDone) SizedBox(height: 16.0),
+                    if (!isChoolCheckDone && isRangeDistance)
                       OutlinedButton(
                         onPressed: choolCheckPressed,
-                        child: Text('출근하기'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.blue,
                         ),
-                      ),
+                        child: Text('출근하기'),
+                      )
                   ],
                 ),
               ),
@@ -166,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (result) {
       setState(() {
-        isChoolCheck = true;
+        isChoolCheckDone = true;
       });
     }
   }
