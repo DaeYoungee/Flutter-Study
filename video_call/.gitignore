@@ -1,4 +1,6 @@
 # Miscellaneous
+
+./lib/const/keys.dart
 *.class
 *.log
 *.pyc
