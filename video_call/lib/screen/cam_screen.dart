@@ -62,7 +62,17 @@ class _CamScreenState extends State<CamScreen> {
           return Stack(
             children: [
               Container(color: Colors.red),
-              Container(width: 120.0, height: 160.0, color: Colors.blue),
+              Container(
+                width: 120.0,
+                height: 160.0,
+                color: Colors.blue,
+                child: AgoraVideoView(
+                  controller: VideoViewController(
+                    rtcEngine: engine!,
+                    canvas: VideoCanvas(uid: uid),
+                  ),
+                ),
+              ),
               Positioned(
                 bottom: 16,
                 left: 16,
@@ -71,7 +81,7 @@ class _CamScreenState extends State<CamScreen> {
               ),
             ],
           );
-        }
+        },
       ),
     );
   }
