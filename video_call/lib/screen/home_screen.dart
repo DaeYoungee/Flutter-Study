@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_call/screen/cam_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -33,7 +34,7 @@ class _Logo extends StatelessWidget {
               color: Colors.blue[300]!,
               spreadRadius: 2.0,
               blurRadius: 12.0,
-            )
+            ),
           ],
         ),
         child: Padding(
@@ -43,8 +44,10 @@ class _Logo extends StatelessWidget {
             children: [
               Icon(Icons.add, color: Colors.white),
               SizedBox(width: 12.0),
-              Text('Live',
-                  style: TextStyle(color: Colors.white, fontSize: 30.0)),
+              Text(
+                'Live',
+                style: TextStyle(color: Colors.white, fontSize: 30.0),
+              ),
             ],
           ),
         ),
@@ -52,7 +55,6 @@ class _Logo extends StatelessWidget {
     );
   }
 }
-
 
 class _Image extends StatelessWidget {
   const _Image({super.key});
@@ -62,7 +64,6 @@ class _Image extends StatelessWidget {
     return Center(child: Image.asset('asset/img/home_img.png'));
   }
 }
-
 
 class _Footer extends StatelessWidget {
   const _Footer({super.key});
@@ -75,9 +76,14 @@ class _Footer extends StatelessWidget {
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) => CamScreen()),
+          );
+        },
         child: Text('입장하기'),
       ),
-    );;
+    );
+    ;
   }
 }
